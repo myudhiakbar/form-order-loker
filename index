@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Form Order PP Loker</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" defer></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="container-fluid py-4">
+    <div class="form-container mx-auto">
+      <h2 id="typingText"></h2>
+      <form id="orderForm">
+        <div class="mb-3">
+          <label for="nama" class="form-label">Nama Anda</label>
+          <input type="text" id="nama" name="nama" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="wa" class="form-label">Nomor WhatsApp</label>
+          <input type="text" id="wa" name="wa" class="form-control" placeholder="contoh: 08123456789" required>
+          <div class="invalid-feedback">Nomor WhatsApp harus berisi angka</div>
+        </div>
+
+        <div class="mb-3">
+          <label for="produk" class="form-label">Pilih Paket</label>
+          <select name="produk" id="produk" class="form-select" required>
+            <option value="">⏳ Memuat daftar paket...</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="bukti" class="form-label">Upload Bukti Transfer (JPEG/PNG)</label>
+          <input type="file" id="bukti" name="bukti" class="form-control" accept="image/jpeg" required>
+        </div>
+
+        <div class="rekening mb-4">
+          <p>➡️ BCA: <span id="bca">5800244716</span>
+            <button type="button" class="copy-btn" onclick="copyText('bca')">📋</button></p>
+          <p>➡️ MANDIRI: <span id="mandiri">9000032618168</span>
+            <button type="button" class="copy-btn" onclick="copyText('mandiri')">📋</button></p>
+          <p>a.n. Muhammad Yudhi Akbar</p>
+        </div>
+
+        <button type="submit" id="submitBtn" class="btn btn-submit w-100">📤 Order Sekarang</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
