@@ -1,134 +1,221 @@
-    
-  body {
-    font-family: 'Segoe UI', sans-serif;
-    background-color: #b4befe;
-    color: #fff;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.2rem;
+
+  // Fungsi salin no rekening
+    function copyText(id) {
+    const text = document.getElementById(id).innerText;
+    navigator.clipboard.writeText(text);
+    // alert("✅ Nomor rekening telah disalin: " + text);
+    Swal.fire ({
+    icon: 'success',
+    title: 'Nomor rekening disalin!',
+    text: `✅ ${text}`,
+    timer: 1800,
+    showConfirmButton: false,
+    timerProgressBar: true,
+    showClass: { popup: 'animate__animated animate__fadeInDown' },
+    hideClass: { popup: 'animate__animated animate__fadeOutUp' }
+    });
   }
 
-  .form-container {
-    background-color: #1a1a2f;
-    border-radius: 15px;
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
-    padding: 2rem;
-    width: 100%;
-    max-width: 500px;
+  // === Variabel elemen ===
+  const form = document.getElementById("orderForm");
+  const waField = document.getElementById("wa");
+  const namaField = document.getElementById("nama");
+  const produkField = document.getElementById("produk");
+  const namaRekField = document.getElementById("namaRek");
+  const buktiField = document.getElementById("bukti");
+
+  const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwnhTNcpCmCsgouD6RgiF7LH8Qrx_xAr6A56p_THvmpG-4U9frxsLVgkZ5LF9_YSbJeQw/exec";
+  const ADMIN_WA = "6287713314496";
+
+  function updateFieldFeedback(field) {
+  // Temukan elemen invalid-feedback terdekat
+  let feedback = field.nextElementSibling;
+  if (!feedback || !feedback.classList.contains("invalid-feedback")) {
+    const parent = field.closest(".mb-3, .form-group") || field.parentElement;
+    feedback = parent ? parent.querySelector(".invalid-feedback") : null;
+  }
+  if (!feedback) return;
+
+  // Tampilkan atau sembunyikan pesan error
+  feedback.style.display = field.classList.contains("is-invalid")
+    ? "block"
+    : "none";
   }
 
-  h2 {
-    color: #ffcc00;
-    font-weight: 700;
-    font-size: clamp(24px, 2.5vw, 32px);
-    text-align: center;
-    margin-top: 1.5rem;
-    margin-bottom: 2rem;
+  function validateField(field, condition) {
+    if (!condition) {
+      field.classList.remove("is-valid");
+      field.classList.add("is-invalid");
+    } else {
+      field.classList.remove("is-invalid");
+      field.classList.add("is-valid");
+    }
+    updateFieldFeedback(field);
   }
 
-  /* Atur tinggi semua field input dan select */
-  input.form-control,
-  select.form-select,
-  textarea.form-control {
-    height: 45px;              /* tinggi field uniform */
-    padding: 0.6rem 1rem;      /* jarak teks ke tepi */
-    font-size: 1rem;           /* ukuran teks */
-    border-radius: 10px;       /* sudut melengkung */
-    border: 1px solid #ccc;
+  function validateWA() {
+    const wa = waField.value.replace(/\D/g, ""); // hanya angka
+    waField.value = wa;
+    const isValid = /^\d{10,13}$/.test(wa);
+    validateField(waField, isValid);
+    return isValid;
   }
 
-  /* Field file upload lebih tinggi sedikit */
-  input[type="file"].form-control {
-    height: auto; /* tinggi menyesuaikan isi */
-    padding: 0.5rem;
+  function validateFormFields() {
+  let valid = true;
+
+  validateField(namaField, namaField.value.trim() !== "");
+  validateField(produkField, produkField.value.trim() !== "");
+  validateField(namaRekField, namaRekField.value.trim() !== "");
+  validateField(buktiField, !!buktiField.files[0]);
+  if (!validateWA()) valid = false;
+
+  // Jika ada yang invalid
+  form.querySelectorAll(".form-control, .form-select").forEach((f) => {
+      if (f.classList.contains("is-invalid")) valid = false;
+    });
+
+    return valid;
   }
 
-  /* Saat klik input, efek warna elegan */
-  input:focus,
-  select:focus,
-  textarea:focus {
-    border-color: #f39c12;
-    box-shadow: 0 0 0 0.2rem rgba(243, 156, 18, 0.25);
-  }
+  // === Event listeners ===
+  waField.addEventListener("input", validateWA);
 
-  /* Label agar punya jarak yang pas */
-  label.form-label {
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-  }
+  form.addEventListener("input", (e) => {
+    const field = e.target;
+    if (field.matches("#nama")) validateField(field, field.value.trim() !== "");
+    if (field.matches("#produk")) validateField(field, field.value.trim() !== "");
+    if (field.matches("#namaRek")) validateField(field, field.value.trim() !== "");
+    if (field.matches("#bukti")) validateField(field, !!field.files[0]);
+  });
 
-  /* Jarak antar field */
-  .form-control,
-  .form-select {
-    margin-bottom: 1rem;
-  }
+  // Saat form disubmit
+  form.addEventListener("submit", function (e) {
+    if (!validateFormFields()) {
+    e.preventDefault();
+      const firstInvalid = form.querySelector(".is-invalid");
+      if (firstInvalid) firstInvalid.focus();
+    }
+  });
 
-  .invalid-feedback {
-    display: none;
-    color: #dc3545;
-    font-size: 0.9rem;
-    margin-top: 1px;
-  }
+  // === Ambil daftar produk secara dinamis ===
+  async function loadProduk() {
+    try {
+      const res = await fetch(WEBAPP_URL);
+      const data = await res.json();
+      const select = document.getElementById("produk");
+      select.innerHTML = "";
 
-  input.is-invalid + .invalid-feedback {
-    display: block;
-  }
-
-  .copy-btn {
-    background: none;
-    border: none;
-    color: #ffcc00;
-    cursor: pointer;
-  }
-
-  .copy-btn:hover {
-    color: #fff;
-  }
-
-  .btn-submit {
-    background: linear-gradient(45deg, #f39c12, #e67e22);
-    border: none;
-    font-weight: bold;
-    color: #1a1a2f;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-  }
-
-  .btn-submit:hover {
-    opacity: 0.9;
-    color: #1a1a2f;
-  }
-
-  .rekening p {
-    margin-bottom: 0.5rem;
-  }
-
-  button.loading {
-    pointer-events: none;
-    opacity: 0.7;
-    position: relative;
-  }
-
-  button.loading::after {
-    content: "";
-    position: absolute;
-    right: 16px;
-    top: 50%;
-    width: 18px;
-    height: 18px;
-    border: 2px solid white;
-    border-top: 2px solid transparent;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    transform: translateY(-50%);
-  }
-
-  @keyframes spin {
-    to {
-      transform: translateY(-50%) rotate(360deg);
+      if (data.result === "success" && data.produk.length > 0) {
+        select.innerHTML = '<option value="">-- Pilih Paket --</option>';
+        data.produk.forEach(p => {
+          const opt = document.createElement("option");
+          opt.value = p;
+          opt.textContent = p;
+          select.appendChild(opt);
+        });
+      } else {
+        select.innerHTML = '<option value="">❌ Gagal memuat produk</option>';
+      }
+    } catch (err) {
+      document.getElementById("produk").innerHTML = '<option value="">⚠️ Error memuat produk</option>';
+      console.error(err);
     }
   }
+
+  // === Konversi file ke Base64 ===
+  function toBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result.split(",")[1]);
+      reader.onerror = (err) => reject(err);
+    });
+  }
+
+  // === Proses Submit Form ===
+  document.getElementById("orderForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const form = e.target;
+    const btn = document.getElementById("submitBtn");
+    btn.classList.add("loading");
+
+    const buktiFile = form.bukti.files[0];
+      if (!buktiFile) {
+      alert("❌ Harap upload bukti transfer");
+      btn.classList.remove("loading");
+      return;
+    }
+    if (buktiFile.size > 2 * 1024 * 1024) {
+      alert("❌ Ukuran file maksimal 2MB");
+      btn.classList.remove("loading");
+      return;
+    }
+
+    Swal.fire({
+      title: 'Menyimpan data...',
+      html: '<small>Mohon tunggu sebentar</small><br><br><div class="spinner-border text-primary" role="status"></div>',
+      allowOutsideClick: false,
+      showConfirmButton: false,
+    });
+
+    try {
+    const buktiBase64 = await toBase64(buktiFile);
+
+    const data = {
+      nama: form.nama.value,
+      wa: form.wa.value,
+      produk: form.produk.value,
+      namaRek: form.namaRek.value,
+      bukti: buktiBase64,
+      buktiNama: buktiFile.name
+    };
+
+    const res = await fetch(WEBAPP_URL, {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+
+    const result = await res.json();
+    Swal.close(); // tutup loader
+
+    if (result.result === "success") {
+      const fileUrl = result.fileUrl || "-";
+      const pesan = `Halo min, saya sudah transfer untuk iklan\n\n- Nama: ${data.nama}\n- WA: ${data.wa}\n- Produk: ${data.produk}\n- Nama Pemilik Rekening: ${data.namaRek}\n- Bukti transfer: ${fileUrl}`;
+      const pesanUrl = `https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(pesan)}`;
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Order berhasil disimpan!',
+        text: 'Silakan kirim bukti ke admin via WhatsApp.',
+        confirmButtonText: 'Kirim ke Admin',
+        showClass: { popup: 'animate__animated animate__fadeInDown' },
+        hideClass: { popup: 'animate__animated animate__fadeOutUp' }
+      }).then(() => {
+        window.location.href = pesanUrl;
+        form.reset();
+      });
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Gagal menyimpan order!',
+        text: result.message,
+        showClass: { popup: 'animate__animated animate__fadeInDown' },
+        hideClass: { popup: 'animate__animated animate__fadeOutUp' }
+      });
+    }
+
+    } catch (err) {
+      Swal.close();
+      Swal.fire({
+        icon: 'error',
+        title: 'Terjadi kesalahan!',
+        text: err.message,
+        showClass: { popup: 'animate__animated animate__fadeInDown' },
+        hideClass: { popup: 'animate__animated animate__fadeOutUp' }
+      });
+    }
+  });
+
+  window.addEventListener("DOMContentLoaded", loadProduk);
