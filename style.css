@@ -57,6 +57,10 @@
     margin-bottom: 1rem;
   }
 
+  .rekening {
+    margin: 2rem 0;
+  }
+
   .rekening p {
     margin-bottom: 0.5rem;
   }
@@ -140,5 +144,6 @@
   .form-select {
     transition: border-color 0.25s ease, box-shadow 0.25s ease;
   }
+
 
 
