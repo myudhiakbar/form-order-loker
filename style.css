@@ -22,7 +22,7 @@
   h2 {
     color: #01239e;
     font-weight: 700;
-    font-size: clamp(24px, 2.5vw, 32px);
+    font-size: clamp(20px, 2.5vw, 28px);
     text-align: center;
     margin-top: 1.5rem;
     margin-bottom: 2rem;
@@ -30,8 +30,7 @@
 
   /* Atur tinggi semua field input dan select */
   input.form-control,
-  select.form-select,
-  textarea.form-control {
+  select.form-select {
     height: 50px;              /* tinggi field uniform */
     padding: 0.6rem 1rem;      /* jarak teks ke tepi */
     font-size: 1rem;           /* ukuran teks */
@@ -144,6 +143,7 @@
   .form-select {
     transition: border-color 0.25s ease, box-shadow 0.25s ease;
   }
+
 
 
 
