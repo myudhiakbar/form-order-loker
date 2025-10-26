@@ -15,7 +15,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 30px;
+    padding: 20px;
     font-size: 16px;
   }
 
@@ -82,6 +82,10 @@
       text-decoration: none;
   }
 
+  #waCount {
+  display: none; /* hide default sebelum mengetik */
+  }
+
   .wa-valid {
   color: #059705 !important;
   font-weight: 600;
@@ -96,7 +100,15 @@
    /* Mobile */
   @media (max-width: 767px) {
       h1 { 
-          font-size: 1.5rem;
+          font-size: 1.4rem;
+      }
+
+      p { 
+          font-size: 0.8rem;
+      }
+
+      footer {
+        font-size: 0.8rem;
       }
   }
   </style>
@@ -115,7 +127,7 @@
         <div class="mb-3">
           <label for="no_wa" class="form-label">Nomor WhatsApp <span class="text-danger">*</span></label>
           <input type="text" id="no_wa" name="no_wa" class="form-control" placeholder="" required>
-          <small id="waCount" class="text-muted d-block mt-1">0 digit</small>
+          <small id="waCount" class="text-muted d-block mt-1"></small>
         </div>
 
         <div class="mb-3">
@@ -147,7 +159,7 @@
       waInput.value = waInput.value.replace(/\D/g, "");
       
       const onlyNumber = waInput.value.replace(/\D/g, "");
-      waCount.textContent = `${onlyNumber.length} digit`;
+      waCount.textContent = `${onlyNumber.length} angka`;
 
       // Reset class
       waCount.classList.remove("wa-valid", "wa-invalid");
