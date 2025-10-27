@@ -16,7 +16,7 @@
     justify-content: center;
     align-items: center;
     padding: 20px;
-    font-size: 16px;
+    font-size: 18px;
   }
 
   .form-card {
@@ -73,17 +73,13 @@
 
   footer {
       margin: 2.5rem 0 0;
-      font-size: 1em;
+      font-size: 1rem;
       text-align: center;
   }
 
   footer a {
       color: blue;
       text-decoration: none;
-  }
-
-  #waCount {
-  display: none; /* hide default sebelum mengetik */
   }
 
   .wa-valid {
@@ -100,15 +96,15 @@
    /* Mobile */
   @media (max-width: 767px) {
       h1 { 
-          font-size: 1.4rem;
+          font-size: 1.6rem;
       }
 
       p { 
-          font-size: 0.8rem;
+          font-size: 1rem;
       }
 
       footer {
-        font-size: 0.8rem;
+        font-size: 0.9rem;
       }
   }
   </style>
@@ -159,7 +155,7 @@
       waInput.value = waInput.value.replace(/\D/g, "");
       
       const onlyNumber = waInput.value.replace(/\D/g, "");
-      waCount.textContent = `${onlyNumber.length} angka`;
+      waCount.textContent = `count : ` + `${onlyNumber.length} number`;
 
       // Reset class
       waCount.classList.remove("wa-valid", "wa-invalid");
