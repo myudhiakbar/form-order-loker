@@ -204,7 +204,7 @@
         Swal.fire({
           icon: 'error',
           title: 'Nomor WA tidak valid!',
-          text: 'Mohon masukkan nomor WA yang benar. Tanpa spasi/simbol.',
+          text: 'Mohon masukkan nomor WA yang benar. Tanpa spasi / simbol ya.',
           showClass: { popup: 'animate__animated animate__fadeInDown' },
           hideClass: { popup: 'animate__animated animate__fadeOutUp' }
         });
@@ -237,8 +237,6 @@
             title: 'Pesan berhasil disimpan!',
             text: 'Klik tombol OK untuk kirim ke admin via WhatsApp',
             confirmButtonText: 'OK, kirim ke admin',
-            showClass: { popup: 'animate__animated animate__fadeInDown' },
-            hideClass: { popup: 'animate__animated animate__fadeOutUp' }
           }).then(() => {
             window.location.href = pesanUrl;
             form.reset();
