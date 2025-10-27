@@ -6,6 +6,7 @@
   <title>Contact Us By Lokerkesehatanid</title>
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4/animate.min.css"/>
   <!-- <link rel="stylesheet" href="style.css"> -->
   <style>
     
@@ -189,6 +190,8 @@
           icon: 'warning',
           title: 'Data belum lengkap!',
           text: 'Nama, Nomor WA dan Isi Pesan wajib diisi!',
+          showClass: { popup: 'animate__animated animate__fadeInDown' },
+          hideClass: { popup: 'animate__animated animate__fadeOutUp' }
         });
         
         submitBtn.disabled = false;
@@ -201,7 +204,9 @@
         Swal.fire({
           icon: 'error',
           title: 'Nomor WA tidak valid!',
-          text: 'Minimal 10 digit, maksimal 13 digit, dan TANPA spasi/simbol.',
+          text: 'Mohon masukkan nomor WA yang benar. Tanpa spasi/simbol.',
+          showClass: { popup: 'animate__animated animate__fadeInDown' },
+          hideClass: { popup: 'animate__animated animate__fadeOutUp' }
         });
         
         submitBtn.disabled = false;
@@ -224,7 +229,7 @@
         const result = await res.json();
 
         if (result.result === "success") {
-          const pesan = `Hai admin @lokerkesehatanid, nama saya : ${data.nama}\nno wa : ${data.wa}\nIsi pesan :\n${data.isiPesan}`;
+          const pesan = `Hai admin @lokerkesehatanid, nama saya : ${data.nama}\nno wa : ${data.wa}\n\nIsi pesan :\n${data.isiPesan}`;
           const pesanUrl = `https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(pesan)}`;
 
           Swal.fire({
@@ -232,6 +237,8 @@
             title: 'Pesan berhasil disimpan!',
             text: 'Klik tombol OK untuk kirim ke admin via WhatsApp',
             confirmButtonText: 'OK, kirim ke admin',
+            showClass: { popup: 'animate__animated animate__fadeInDown' },
+            hideClass: { popup: 'animate__animated animate__fadeOutUp' }
           }).then(() => {
             window.location.href = pesanUrl;
             form.reset();
@@ -242,6 +249,8 @@
             icon: 'error',
             title: 'Gagal menyimpan pesan!',
             text: result.message,
+            showClass: { popup: 'animate__animated animate__fadeInDown' },
+            hideClass: { popup: 'animate__animated animate__fadeOutUp' }
           });
         }
 
@@ -250,6 +259,8 @@
           icon: 'error',
           title: 'Terjadi kesalahan!',
           text: err.message,
+          showClass: { popup: 'animate__animated animate__fadeInDown' },
+          hideClass: { popup: 'animate__animated animate__fadeOutUp' }
         });
 
       } finally {
