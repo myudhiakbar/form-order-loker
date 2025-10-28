@@ -190,7 +190,7 @@
           icon: 'warning',
           title: 'Data belum lengkap!',
           text: 'Nama, Nomor WA dan Isi Pesan wajib diisi!',
-          showClass: { popup: 'animate__animated animate__fadeInDown' },
+          confirmButtonText: 'OK',
           hideClass: { popup: 'animate__animated animate__fadeOutUp' }
         });
         
@@ -205,7 +205,7 @@
           icon: 'error',
           title: 'Nomor WA tidak valid!',
           text: 'Mohon masukkan nomor WA yang benar. Tanpa spasi / simbol ya.',
-          showClass: { popup: 'animate__animated animate__fadeInDown' },
+          confirmButtonText: 'OK',
           hideClass: { popup: 'animate__animated animate__fadeOutUp' }
         });
         
@@ -236,7 +236,7 @@
             icon: 'success',
             title: 'Pesan berhasil disimpan!',
             text: 'Klik tombol OK untuk kirim ke admin via WhatsApp',
-            confirmButtonText: 'OK, kirim ke admin',
+            confirmButtonText: 'OK, kirim ke admin'
           }).then(() => {
             window.location.href = pesanUrl;
             form.reset();
@@ -247,7 +247,7 @@
             icon: 'error',
             title: 'Gagal menyimpan pesan!',
             text: result.message,
-            showClass: { popup: 'animate__animated animate__fadeInDown' },
+            confirmButtonText: 'OK',
             hideClass: { popup: 'animate__animated animate__fadeOutUp' }
           });
         }
@@ -257,7 +257,7 @@
           icon: 'error',
           title: 'Terjadi kesalahan!',
           text: err.message,
-          showClass: { popup: 'animate__animated animate__fadeInDown' },
+          confirmButtonText: 'OK',
           hideClass: { popup: 'animate__animated animate__fadeOutUp' }
         });
 
