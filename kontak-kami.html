@@ -7,9 +7,7 @@
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4/animate.min.css"/>
-  <!-- <link rel="stylesheet" href="style.css"> -->
   <style>
-    
   body {
     background: linear-gradient(135deg, #ece9e6, #ffffff);
     min-height: 100vh;
@@ -47,13 +45,13 @@
 
   input.form-control,
   textarea.form-control {
-    padding: 0.6rem 1rem;      /* jarak teks ke tepi */
-    border-radius: 5px;       /* sudut melengkung */
+    padding: 0.6rem 1rem;
+    border-radius: 5px;
     border: 1.4px solid #ccc;
   }
 
   input.form-control {
-    height: 2.5rem;              /* tinggi field uniform */
+    height: 2.5rem;
   }
 
   .btn {
@@ -69,7 +67,6 @@
 
   .btn-primary:hover {
     background: #2e59d9;
-    /* transform: translateY(-2px); */
   }
 
   footer {
@@ -83,30 +80,29 @@
       text-decoration: none;
   }
 
-  .wa-valid {
-  color: #059705 !important;
-  font-weight: 600;
+  .is-invalid {
+    border-color: #dc3545 !important;
+    box-shadow: 0 0 0 0.15rem rgba(220, 53, 69, 0.15);
+    display: block;
   }
 
-  .wa-invalid {
-    color: #d90429 !important;
-    font-weight: 600;
+  .is-valid {
+    border-color: #28a745 !important;
+    box-shadow: 0 0 0 0.15rem rgba(40, 167, 69, 0.15);
   }
 
-  /* Responsive */
-   /* Mobile */
+  .invalid-feedback {
+    display: none;
+    font-size: 0.85rem;
+    color: #dc3545;
+    margin: 0.8rem 0 0;
+    line-height: 1.2;
+  }
+
   @media (max-width: 767px) {
-      h1 { 
-          font-size: 1.6rem;
-      }
-
-      p { 
-          font-size: 1rem;
-      }
-
-      footer {
-        font-size: 0.9rem;
-      }
+      h1 { font-size: 1.6rem; }
+      p { font-size: 1rem; }
+      footer { font-size: 0.9rem; }
   }
   </style>
 </head>
@@ -118,155 +114,174 @@
       <form id="contactForm">
         <div class="mb-3">
           <label for="nama" class="form-label">Nama <span class="text-danger">*</span></label>
-          <input type="text" id="nama" name="nama" class="form-control" placeholder="" required>
+          <input type="text" id="nama" name="nama" class="form-control" required>
+          <div class="invalid-feedback">Wajib diisi</div>
         </div>
 
         <div class="mb-3">
           <label for="no_wa" class="form-label">Nomor WhatsApp <span class="text-danger">*</span></label>
-          <input type="text" id="no_wa" name="no_wa" class="form-control" placeholder="" required>
-          <small id="waCount" class="text-muted d-block mt-1"></small>
+          <input type="text" id="no_wa" name="no_wa" class="form-control" required>
+          <div class="invalid-feedback">Wajib diisi angka dan no WA yang valid ya</div>
         </div>
 
         <div class="mb-3">
           <label for="isi_pesan" class="form-label">Isi Pesan <span class="text-danger">*</span></label>
-          <textarea id="isi_pesan" name="isi_pesan" class="form-control" rows="4" placeholder="" required></textarea>
+          <textarea id="isi_pesan" name="isi_pesan" class="form-control" rows="4" required></textarea>
+          <div class="invalid-feedback">Wajib diisi</div>
         </div>
 
         <button type="submit" id="submitBtn" class="btn btn-primary w-100">Kirim Pesan</button>
         <footer>
-            <a href="https://link.loker-kesehatan.my.id">Loker Kesehatan ID</a> © 2018 - <span id="year"></span>
+          <a href="https://link.loker-kesehatan.my.id">Loker Kesehatan ID</a> © 2018 - <span id="year"></span>
         </footer>
       </form>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <!-- <script src="script.js"></script> -->
-  <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+document.getElementById("year").textContent = new Date().getFullYear();
 
-    // === Form Submit Handling ===
-    const scriptURL = "https://script.google.com/macros/s/AKfycbztu0VlT9aVNgqxLLm8e687FypkgYFPYUsqlThUH2R8d8sZNGg9P2Vn72dfSuYkWnc/exec";
-    const ADMIN_WA = "6287713314496";
+const form = document.getElementById("contactForm");
+const namaField = document.getElementById("nama");
+const waField = document.getElementById("no_wa");
+const pesanField = document.getElementById("isi_pesan");
 
-    const waInput = document.getElementById("no_wa");
-    const waCount = document.getElementById("waCount");
+function updateFieldFeedback(field) {
+  let feedback = field.nextElementSibling;
+  if (!feedback || !feedback.classList.contains("invalid-feedback")) {
+    const parent = field.closest(".mb-3, .form-group") || field.parentElement;
+    feedback = parent ? parent.querySelector(".invalid-feedback") : null;
+  }
+  if (!feedback) return;
+  feedback.style.display = field.classList.contains("is-invalid") ? "block" : "none";
+}
 
-    waInput.addEventListener("input", () => {
-      waInput.value = waInput.value.replace(/\D/g, "");
-      
-      const onlyNumber = waInput.value.replace(/\D/g, "");
-      waCount.textContent = `count : ` + `${onlyNumber.length} number`;
+function validateField(field, condition) {
+  if (!condition) {
+    field.classList.remove("is-valid");
+    field.classList.add("is-invalid");
+  } else {
+    field.classList.remove("is-invalid");
+    field.classList.add("is-valid");
+  }
+  updateFieldFeedback(field);
+}
 
-      // Reset class
-      waCount.classList.remove("wa-valid", "wa-invalid");
+function validateWA() {
+  const wa = waField.value.replace(/\D/g, "");
+  waField.value = wa;
+  const isValid = /^\d{10,13}$/.test(wa);
+  validateField(waField, isValid);
+  return isValid;
+}
 
-      // Atur warna
-      if (onlyNumber.length >= 10 && onlyNumber.length <= 13) {
-        waCount.classList.add("wa-valid"); // valid
-      } else {
-        waCount.classList.add("wa-invalid"); // invalid
-      }
+function validateFormFields() {
+  let valid = true;
+  validateField(namaField, namaField.value.trim() !== "");
+  validateField(waField, validateWA());
+  validateField(pesanField, pesanField.value.trim() !== "");
+  form.querySelectorAll(".form-control").forEach((f) => {
+    if (f.classList.contains("is-invalid")) valid = false;
+  });
+  return valid;
+}
+
+waField.addEventListener("input", validateWA);
+form.addEventListener("input", (e) => {
+  const field = e.target;
+  if (field.matches("#nama")) validateField(field, field.value.trim() !== "");
+  if (field.matches("#isi_pesan")) validateField(field, field.value.trim() !== "");
+});
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  if (!validateFormFields()) {
+    const firstInvalid = form.querySelector(".is-invalid");
+    if (firstInvalid) firstInvalid.focus();
+    return;
+  }
+
+  const submitBtn = document.getElementById("submitBtn");
+  const nama = namaField.value.trim();
+  const wa = waField.value.trim();
+  const isiPesan = pesanField.value.trim();
+
+  const confirmSend = await Swal.fire({
+    title: 'Simpan pesan sekarang?',
+    text: 'Pastikan data yang kamu isi sudah benar.',
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonText: 'OK, lanjutkan',
+    cancelButtonText: 'Batal',
+    reverseButtons: true
+  });
+
+  if (!confirmSend.isConfirmed) return;
+
+  Swal.fire({
+    title: 'Menyimpan pesan...',
+    text: 'Mohon tunggu sebentar.',
+    allowOutsideClick: false,
+    allowEscapeKey: false,
+    didOpen: () => Swal.showLoading()
+  });
+
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = `
+    <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+    Mengirim...
+  `;
+
+  const data = { nama, wa, isiPesan };
+  const scriptURL = "https://script.google.com/macros/s/AKfycbztu0VlT9aVNgqxLLm8e687FypkgYFPYUsqlThUH2R8d8sZNGg9P2Vn72dfSuYkWnc/exec";
+  const ADMIN_WA = "6287713314496";
+
+  try {
+    const res = await fetch(scriptURL, {
+      method: "POST",
+      body: JSON.stringify(data),
     });
+    const result = await res.json();
 
-    document.getElementById("contactForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
+    if (result.result === "success") {
+      const pesan = `Hai admin @lokerkesehatanid,\nNama: ${data.nama}\nNo WA: ${data.wa}\n\nIsi pesan:\n${data.isiPesan}`;
+      const pesanUrl = `https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(pesan)}`;
 
-      const form = e.target;
-      const submitBtn = document.getElementById("submitBtn");
-      const nama = form.nama.value.trim();
-      const wa = form.no_wa.value.trim();
-      const isiPesan = form.isi_pesan.value.trim();
-      // === Tombol Loading Bootstrap ===
-      submitBtn.disabled = true;
-      submitBtn.innerHTML = `
-        <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-        Mengirim...
-      `;
-
-      // === Validasi Wajib Diisi ===
-      if (!nama || !wa || !isiPesan) {
-        Swal.fire({
-          icon: 'warning',
-          title: 'Data belum lengkap!',
-          text: 'Nama, Nomor WA dan Isi Pesan wajib diisi!',
-          confirmButtonText: 'OK',
-          hideClass: { popup: 'animate__animated animate__fadeOutUp' }
+      Swal.fire({
+        icon: 'success',
+        title: 'Pesan berhasil disimpan!',
+        text: 'Klik tombol OK untuk kirim ke admin via WhatsApp',
+        confirmButtonText: 'OK, kirim ke admin'
+      }).then(() => {
+        window.location.href = pesanUrl;
+        form.reset();
+        form.querySelectorAll(".form-control").forEach((field) => {
+          field.classList.remove("is-valid", "is-invalid");
         });
-        
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = `Kirim Pesan`;
-        return;
-      }
+      });
 
-      // === Validasi PANJANG NOMOR WHATSAPP ===
-      if (wa.length < 10 || wa.length > 13 || isNaN(wa)) {
-        Swal.fire({
-          icon: 'error',
-          title: 'Nomor WA tidak valid!',
-          text: 'Mohon masukkan nomor WA yang benar. Tanpa spasi / simbol ya.',
-          confirmButtonText: 'OK',
-          hideClass: { popup: 'animate__animated animate__fadeOutUp' }
-        });
-        
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = `Kirim Pesan`;
-        return;
-      }
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Gagal menyimpan pesan!',
+        text: result.message || 'Terjadi kesalahan di server.',
+        confirmButtonText: 'OK'
+      });
+    }
 
-      const data = {
-        nama: nama,
-        wa: wa,
-        isiPesan: isiPesan,
-      };
-
-      try {
-        const res = await fetch(scriptURL, {
-          method: "POST",
-          body: JSON.stringify(data),
-        });
-
-        const result = await res.json();
-
-        if (result.result === "success") {
-          const pesan = `Hai admin @lokerkesehatanid, nama saya : ${data.nama}\nno wa : ${data.wa}\n\nIsi pesan :\n${data.isiPesan}`;
-          const pesanUrl = `https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(pesan)}`;
-
-          Swal.fire({
-            icon: 'success',
-            title: 'Pesan berhasil disimpan!',
-            text: 'Klik tombol OK untuk kirim ke admin via WhatsApp',
-            confirmButtonText: 'OK, kirim ke admin'
-          }).then(() => {
-            window.location.href = pesanUrl;
-            form.reset();
-          });
-
-        } else {
-          Swal.fire({
-            icon: 'error',
-            title: 'Gagal menyimpan pesan!',
-            text: result.message,
-            confirmButtonText: 'OK',
-            hideClass: { popup: 'animate__animated animate__fadeOutUp' }
-          });
-        }
-
-      } catch (err) {
-        Swal.fire({
-          icon: 'error',
-          title: 'Terjadi kesalahan!',
-          text: err.message,
-          confirmButtonText: 'OK',
-          hideClass: { popup: 'animate__animated animate__fadeOutUp' }
-        });
-
-      } finally {
-        // === Reset tombol kembali normal ===
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = `Kirim Pesan`;
-      }
+  } catch (err) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Terjadi kesalahan!',
+      text: err.message,
+      confirmButtonText: 'OK'
     });
-  </script>
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = `Kirim Pesan`;
+  }
+});
+</script>
 </body>
 </html>
