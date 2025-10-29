@@ -7,18 +7,18 @@
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4/animate.min.css"/>
-  <!-- <link rel="stylesheet" href="style.css"> -->
+
   <style>
-    
   body {
     font-family: 'Segoe UI', sans-serif;
+    font-size: 16px;
     background: linear-gradient(135deg, #ece9e6, #ffffff);
     color: #000000;
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0.2rem;
+    padding: 3.2px;
   }
 
   .form-container {
@@ -32,58 +32,40 @@
 
   h2 {
     color: #01239e;
-    font-weight: 700;
-    font-size: clamp(20px, 2.5vw, 28px);
+    font-weight: 600;
+    font-size: 2rem;
     text-align: center;
-    margin-top: 1.5rem;
-    margin-bottom: 2rem;
+    margin: 1.5rem 0 2rem;
   }
 
-  /* Atur tinggi semua field input dan select */
   input.form-control,
   select.form-select {
-    height: 50px;              /* tinggi field uniform */
-    padding: 0.6rem 1rem;      /* jarak teks ke tepi */
-    font-size: 1rem;           /* ukuran teks */
-    border-radius: 10px;       /* sudut melengkung */
+    height: 45px;
+    padding: 0.6rem 1rem;
+    font-size: 1rem;
+    border-radius: 5px;
     border: 1px solid #ccc;
   }
 
-  /* Field file upload lebih tinggi sedikit */
   input[type="file"].form-control {
-    height: auto; /* tinggi menyesuaikan isi */
+    height: auto;
     padding: 0.5rem;
   }
 
-  /* Label agar punya jarak yang pas */
-  label.form-label {
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-  }
-
-  /* Jarak antar field */
-  .form-control,
-  .form-select {
-    margin-bottom: 1rem;
-  }
-
   .rekening {
-    margin: 2rem 0;
+    margin: 2rem 0 0;
   }
 
   .rekening p {
-    margin-bottom: 0.5rem;
+    margin: 0 0 0.5rem;
   }
 
   .btn-submit {
     background: linear-gradient(45deg, #1237f3, #223fe6);
     border: none;
-    font-weight: bold;
     color: #ffffff;
-    padding-top: 15px;
-    padding-bottom: 15px;
-    margin-top: 1rem;
-    margin-bottom: 1.5rem;
+    padding: 0.7rem 0;
+    margin: 1rem 0;
   }
 
   .btn-submit:hover {
@@ -91,68 +73,38 @@
     color: #ffffff;
   }
 
-  .btn-submit:active,
-  .btn-submit.loading {
-    color: #ffee58 !important; /* kuning lembut saat ditekan */
-    background: linear-gradient(45deg, #0e2fd1, #1b36cc); /* sedikit lebih gelap */
+  footer {
+    margin: 2.5rem 0 0;
+    font-size: 1rem;
+    text-align: center;
   }
 
-  button.loading {
-    pointer-events: none;
-    opacity: 0.85;
-    position: relative;
+  footer a {
+    color: blue;
+    text-decoration: none;
   }
 
-  button.loading::after {
-    content: "";
-    position: absolute;
-    right: 16px;
-    top: 50%;
-    width: 18px;
-    height: 18px;
-    border: 2px solid white;
-    border-top: 2px solid transparent;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    transform: translateY(-50%);
-  }
-
-  @keyframes spin {
-    to {
-      transform: translateY(-50%) rotate(360deg);
-    }
-  }
-
-  /* Field invalid (merah) */
   .is-invalid {
     border-color: #dc3545 !important;
     box-shadow: 0 0 0 0.15rem rgba(220, 53, 69, 0.15);
   }
 
-  /* Field valid (hijau lembut) */
   .is-valid {
     border-color: #28a745 !important;
     box-shadow: 0 0 0 0.15rem rgba(40, 167, 69, 0.15);
   }
 
-  /* Pesan error */
   .invalid-feedback {
     display: none;
     font-size: 0.85rem;
     color: #dc3545;
-    margin-top: -5px;
+    margin: 0.7rem 0 0;
     line-height: 1.2;
   }
 
-  /* Tampilkan pesan saat field invalid */
-  .is-invalid ~ .invalid-feedback {
-    display: block;
-  }
-
-  /* Transisi halus saat berubah status */
-  .form-control,
-  .form-select {
-    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  @media (max-width: 767px) {
+    h2 { font-size: 1.4rem; }
+    footer { font-size: 0.9rem; }
   }
   </style>
 </head>
@@ -189,46 +141,47 @@
         </div>
 
         <div class="mb-3">
-          <label for="bukti" class="form-label">Upload Bukti Transfer (JPEG/PNG) <span class="text-danger">* (file max 2MB)</span></label>
-          <input type="file" id="bukti" name="bukti" class="form-control" accept="image/jpeg" required>
+          <label for="bukti" class="form-label">Upload Bukti Transfer (JPEG/PNG) <span class="text-danger">* (max 2MB)</span></label>
+          <input type="file" id="bukti" name="bukti" class="form-control" accept="image/jpeg,image/png" required>
           <div class="invalid-feedback">Harap upload bukti transfer</div>
         </div>
 
         <div class="rekening mb-4">
           <p>➡️ BCA: <span id="bca">5800244716</span>
-            <button type="button" class="copy-btn" onclick="copyText('bca')">📋</button></p>
+            <button type="button" class="copy-btn btn btn-sm btn-light" onclick="copyText('bca')">📋</button></p>
           <p>➡️ MANDIRI: <span id="mandiri">9000032618168</span>
-            <button type="button" class="copy-btn" onclick="copyText('mandiri')">📋</button></p>
+            <button type="button" class="copy-btn btn btn-sm btn-light" onclick="copyText('mandiri')">📋</button></p>
           <p>a.n. Muhammad Yudhi Akbar</p>
         </div>
 
         <button type="submit" id="submitBtn" class="btn btn-submit w-100">📤 Kirim Pembayaran</button>
+
+        <footer>
+          <a href="https://link.loker-kesehatan.my.id">Loker Kesehatan ID</a> © 2018 - <span id="year"></span>
+        </footer>
       </form>
     </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <!-- <script src="script.js"></script> -->
-  <script>
-  // Fungsi salin no rekening
-    function copyText(id) {
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  function copyText(id) {
     const text = document.getElementById(id).innerText;
     navigator.clipboard.writeText(text);
-    // alert("✅ Nomor rekening telah disalin: " + text);
-    Swal.fire ({
-    icon: 'success',
-    title: 'Nomor rekening disalin!',
-    text: `✅ ${text}`,
-    timer: 1800,
-    showConfirmButton: false,
-    timerProgressBar: true,
-    showClass: { popup: 'animate__animated animate__fadeInDown' },
-    hideClass: { popup: 'animate__animated animate__fadeOutUp' }
+    Swal.fire({
+      icon: 'success',
+      title: 'Nomor rekening disalin!',
+      text: `✅ ${text}`,
+      timer: 1800,
+      showConfirmButton: false,
+      timerProgressBar: true,
+      hideClass: { popup: 'animate__animated animate__zoomOut' }
     });
   }
 
-  // === Variabel elemen ===
   const form = document.getElementById("orderForm");
   const waField = document.getElementById("wa");
   const namaField = document.getElementById("nama");
@@ -239,21 +192,6 @@
   const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwnhTNcpCmCsgouD6RgiF7LH8Qrx_xAr6A56p_THvmpG-4U9frxsLVgkZ5LF9_YSbJeQw/exec";
   const ADMIN_WA = "6287713314496";
 
-  function updateFieldFeedback(field) {
-  // Temukan elemen invalid-feedback terdekat
-  let feedback = field.nextElementSibling;
-  if (!feedback || !feedback.classList.contains("invalid-feedback")) {
-    const parent = field.closest(".mb-3, .form-group") || field.parentElement;
-    feedback = parent ? parent.querySelector(".invalid-feedback") : null;
-  }
-  if (!feedback) return;
-
-  // Tampilkan atau sembunyikan pesan error
-  feedback.style.display = field.classList.contains("is-invalid")
-    ? "block"
-    : "none";
-  }
-
   function validateField(field, condition) {
     if (!condition) {
       field.classList.remove("is-valid");
@@ -262,11 +200,12 @@
       field.classList.remove("is-invalid");
       field.classList.add("is-valid");
     }
-    updateFieldFeedback(field);
+    const feedback = field.parentElement.querySelector(".invalid-feedback");
+    if (feedback) feedback.style.display = field.classList.contains("is-invalid") ? "block" : "none";
   }
 
   function validateWA() {
-    const wa = waField.value.replace(/\D/g, ""); // hanya angka
+    const wa = waField.value.replace(/\D/g, "");
     waField.value = wa;
     const isValid = /^\d{10,13}$/.test(wa);
     validateField(waField, isValid);
@@ -274,26 +213,21 @@
   }
 
   function validateFormFields() {
-  let valid = true;
+    let valid = true;
+    validateField(namaField, namaField.value.trim() !== "");
+    validateField(produkField, produkField.value.trim() !== "");
+    validateField(namaRekField, namaRekField.value.trim() !== "");
+    validateField(buktiField, !!buktiField.files[0]);
+    if (!validateWA()) valid = false;
 
-  validateField(namaField, namaField.value.trim() !== "");
-  validateField(produkField, produkField.value.trim() !== "");
-  validateField(namaRekField, namaRekField.value.trim() !== "");
-  validateField(buktiField, !!buktiField.files[0]);
-  if (!validateWA()) valid = false;
-
-  // Jika ada yang invalid
-  form.querySelectorAll(".form-control, .form-select").forEach((f) => {
+    form.querySelectorAll(".form-control, .form-select").forEach(f => {
       if (f.classList.contains("is-invalid")) valid = false;
     });
-
     return valid;
   }
 
-  // === Event listeners ===
   waField.addEventListener("input", validateWA);
-
-  form.addEventListener("input", (e) => {
+  form.addEventListener("input", e => {
     const field = e.target;
     if (field.matches("#nama")) validateField(field, field.value.trim() !== "");
     if (field.matches("#produk")) validateField(field, field.value.trim() !== "");
@@ -301,16 +235,7 @@
     if (field.matches("#bukti")) validateField(field, !!field.files[0]);
   });
 
-  // Saat form disubmit
-  form.addEventListener("submit", function (e) {
-    if (!validateFormFields()) {
-    e.preventDefault();
-      const firstInvalid = form.querySelector(".is-invalid");
-      if (firstInvalid) firstInvalid.focus();
-    }
-  });
-
-  // === Ambil daftar produk secara dinamis ===
+  // === Ambil daftar produk ===
   async function loadProduk() {
     try {
       const res = await fetch(WEBAPP_URL);
@@ -335,7 +260,6 @@
     }
   }
 
-  // === Konversi file ke Base64 ===
   function toBase64(file) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -345,22 +269,22 @@
     });
   }
 
-  // === Proses Submit Form ===
-  document.getElementById("orderForm").addEventListener("submit", async (e) => {
+  // === Submit ===
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
+    if (!validateFormFields()) return;
 
-    const form = e.target;
     const btn = document.getElementById("submitBtn");
     btn.classList.add("loading");
 
-    const buktiFile = form.bukti.files[0];
-      if (!buktiFile) {
-      alert("❌ Harap upload bukti transfer");
+    const buktiFile = buktiField.files[0];
+    if (!buktiFile) {
+      Swal.fire("❌", "Harap upload bukti transfer", "error");
       btn.classList.remove("loading");
       return;
     }
     if (buktiFile.size > 2 * 1024 * 1024) {
-      alert("❌ Ukuran file maksimal 2MB");
+      Swal.fire("❌", "Ukuran file maksimal 2MB", "error");
       btn.classList.remove("loading");
       return;
     }
@@ -373,64 +297,58 @@
     });
 
     try {
-    const buktiBase64 = await toBase64(buktiFile);
+      const buktiBase64 = await toBase64(buktiFile);
+      const data = {
+        nama: namaField.value,
+        wa: waField.value,
+        produk: produkField.value,
+        namaRek: namaRekField.value,
+        bukti: buktiBase64,
+        buktiNama: buktiFile.name
+      };
 
-    const data = {
-      nama: form.nama.value,
-      wa: form.wa.value,
-      produk: form.produk.value,
-      namaRek: form.namaRek.value,
-      bukti: buktiBase64,
-      buktiNama: buktiFile.name
-    };
-
-    const res = await fetch(WEBAPP_URL, {
-      method: "POST",
-      body: JSON.stringify(data),
-    });
-
-    const result = await res.json();
-    Swal.close(); // tutup loader
-
-    if (result.result === "success") {
-      const fileUrl = result.fileUrl || "-";
-      const pesan = `Halo min, saya sudah transfer untuk iklan\n\n- Nama: ${data.nama}\n- WA: ${data.wa}\n- Produk: ${data.produk}\n- Nama Pemilik Rekening: ${data.namaRek}\n- Bukti transfer: ${fileUrl}`;
-      const pesanUrl = `https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(pesan)}`;
-
-      Swal.fire({
-        icon: 'success',
-        title: 'Order berhasil disimpan!',
-        text: 'Silakan kirim bukti ke admin via WhatsApp.',
-        confirmButtonText: 'Kirim ke Admin',
-        showClass: { popup: 'animate__animated animate__fadeInDown' },
-        hideClass: { popup: 'animate__animated animate__fadeOutUp' }
-      }).then(() => {
-        window.location.href = pesanUrl;
-        form.reset();
+      const res = await fetch(WEBAPP_URL, {
+        method: "POST",
+        body: JSON.stringify(data),
       });
-    } else {
-      Swal.fire({
-        icon: 'error',
-        title: 'Gagal menyimpan order!',
-        text: result.message,
-        showClass: { popup: 'animate__animated animate__fadeInDown' },
-        hideClass: { popup: 'animate__animated animate__fadeOutUp' }
-      });
-    }
 
+      const result = await res.json();
+      Swal.close();
+
+      if (result.result === "success") {
+        const fileUrl = result.fileUrl || "-";
+        const pesan = `Halo min, saya sudah transfer untuk iklan\n\n- Nama: ${data.nama}\n- WA: ${data.wa}\n- Produk: ${data.produk}\n- Nama Rek: ${data.namaRek}\n- Bukti: ${fileUrl}`;
+        const pesanUrl = `https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(pesan)}`;
+
+        Swal.fire({
+          icon: 'success',
+          title: 'Order berhasil disimpan!',
+          text: 'Silakan kirim bukti ke admin via WhatsApp.',
+          confirmButtonText: 'Kirim ke Admin'
+        }).then(() => {
+          window.location.href = pesanUrl;
+          form.reset();
+          form.querySelectorAll(".form-control").forEach(field => field.classList.remove("is-valid", "is-invalid"));
+        });
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Gagal menyimpan order!',
+          text: result.message || 'Silakan coba lagi.'
+        });
+      }
     } catch (err) {
       Swal.close();
       Swal.fire({
         icon: 'error',
         title: 'Terjadi kesalahan!',
-        text: err.message,
-        showClass: { popup: 'animate__animated animate__fadeInDown' },
-        hideClass: { popup: 'animate__animated animate__fadeOutUp' }
+        text: err.message
       });
+    } finally {
+      btn.classList.remove("loading");
     }
   });
-
   window.addEventListener("DOMContentLoaded", loadProduk);
-  </script>
+</script>
 </body>
 </html>
