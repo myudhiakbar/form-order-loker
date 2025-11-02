@@ -132,7 +132,7 @@
 
         <button type="submit" id="submitBtn" class="btn btn-primary w-100">Kirim Pesan</button>
         <footer>
-          <a href="https://link.loker-kesehatan.my.id">Loker Kesehatan ID</a> © 2018 - <span id="year"></span>
+          <a href="https://loker-kesehatan.my.id">Loker Kesehatan ID</a> © 2018 - <span id="year"></span>
         </footer>
       </form>
   </div>
@@ -245,7 +245,7 @@ form.addEventListener("submit", async (e) => {
     const result = await res.json();
 
     if (result.result === "success") {
-      const pesan = `Hai admin @lokerkesehatanid,\nNama: ${data.nama}\nNo WA: ${data.wa}\n\nIsi pesan:\n${data.isiPesan}`;
+      const pesan = `Hai admin @lokerkesehatanid, nama saya : ${data.nama}\nwa : ${data.wa}\n\nIsi pesan :\n${data.isiPesan}`;
       const pesanUrl = `https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(pesan)}`;
 
       Swal.fire({
